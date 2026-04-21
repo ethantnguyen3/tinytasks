@@ -81,7 +81,10 @@ def list_tasks():
 
 @app.post("/tasks")
 def add_task():
-    data = request.get_json(force=True)
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return {"error": "invalid json"}, 400
+
     title = data.get("title")
     if not title:
         return {"error": "title required"}, 400
