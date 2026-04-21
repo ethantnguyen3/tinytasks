@@ -81,10 +81,15 @@ def list_tasks():
 
 @app.post("/tasks")
 def add_task():
-    data = request.get_json(force=True)
+    data = request.get_json(silent=True)
+    if data is None:
+        return {"error": "invalid JSON body"}, 400
+
     title = data.get("title")
     if not title:
         return {"error": "title required"}, 400
+    if len(title) > 500:
+        return {"error": "title too long"}, 400
 
     with get_conn() as conn:
         with conn.cursor() as cur:
