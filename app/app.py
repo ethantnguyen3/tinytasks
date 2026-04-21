@@ -83,11 +83,11 @@ def list_tasks():
 def add_task():
     data = request.get_json(silent=True)
     if not isinstance(data, dict):
-        return {"error": "invalid json"}, 400
+        return {"error": "request body must be a JSON object"}, 400
 
     title = data.get("title")
     if not title:
-        return {"error": "title required"}, 400
+        return {"error": "missing required field: title"}, 400
 
     with get_conn() as conn:
         with conn.cursor() as cur:
