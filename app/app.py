@@ -14,6 +14,7 @@ DB = {
     "user": os.getenv("DB_USER", "appuser"),
     "pass": os.getenv("DB_PASS", "changeme123"),
 }
+MAX_TITLE_LENGTH = 500
 
 
 def get_conn():
@@ -86,9 +87,9 @@ def add_task():
         return {"error": "invalid JSON body"}, 400
 
     title = data.get("title")
-    if not title:
+    if not title or not title.strip():
         return {"error": "title required"}, 400
-    if len(title) > 500:
+    if len(title) > MAX_TITLE_LENGTH:
         return {"error": "title too long"}, 400
 
     with get_conn() as conn:
